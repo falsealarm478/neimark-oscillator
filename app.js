@@ -1,13 +1,15 @@
 /* Rendering is separate from the exact physics in physics.js. No network dependencies. */
 'use strict';
 const $=id=>document.getElementById(id);
+const t=source=>I18n.t(source);
+let noticeMessage='';
 const C={green:'#c1ed83',orange:'#f3ab71',purple:'#b7a2eb',grid:'#2b332b',axis:'#63715e',muted:'#92a08b',bg:'#181c1a'};
 let sim,playing=true,last=0,extent=1.6,flash=0;
 const presets={base:{delta:.055,a:1,h:1,v0:.42},slow:{delta:.025,a:1,h:.8,v0:.65},spiral:{delta:.065,a:1,h:0,v0:.42}};
 function params(){return Object.fromEntries(['delta','a','h','v0'].map(k=>[k,Number($(k).value)]));}
 function reset(){sim=new Neimark.Oscillator(params());extent=Math.max(1.5,sim.a*1.4,Math.abs(sim.v0)*1.5);flash=0;$('notice').hidden=true;for(const [k,v] of Object.entries(params()))$(k+'Value').value=v.toFixed(k==='delta'?3:2);$('q').textContent=Math.exp(Math.PI*sim.delta).toFixed(3);draw();}
-function setPlaying(value){playing=value;$('play').textContent=playing?'Ⅱ Пауза':'▶ Продолжить';draw();}
-function advance(dt){const hits=sim.hits;try{sim.advance(dt);}catch(e){playing=false;$('play').textContent='▶ Продолжить';$('notice').textContent=e.message;$('notice').hidden=false;}if(sim.hits>hits)flash=1;}
+function setPlaying(value){playing=value;$('play').textContent=t(playing?'Ⅱ Пауза':'▶ Продолжить');draw();}
+function advance(dt){const hits=sim.hits;try{sim.advance(dt);}catch(e){playing=false;$('play').textContent=t('▶ Продолжить');noticeMessage=e.message;$('notice').textContent=t(noticeMessage);$('notice').hidden=false;}if(sim.hits>hits)flash=1;}
 for(const k of ['delta','a','h','v0'])$(k).addEventListener('input',()=>{$('preset').value='custom';reset();});
 $('preset').addEventListener('change',()=>{const p=presets[$('preset').value];if(p){for(const [k,v] of Object.entries(p))$(k).value=v;reset();}});
 $('play').onclick=()=>setPlaying(!playing);
@@ -45,7 +47,7 @@ function drawOscillator(){
   const end=px-16,start=left+6;g.beginPath();g.moveTo(start,cy);g.lineTo(start+10,cy);const len=end-start-20;for(let i=0;i<=22;i++)g.lineTo(start+10+len*i/22,cy+(i===0||i===22?0:(i%2?7:-7)));g.lineTo(end,cy);g.strokeStyle='#84986e';g.lineWidth=1.5;g.stroke();
   const color=flash>.15?C.orange:C.green;g.shadowColor=color;g.shadowBlur=18;g.fillStyle=color;g.beginPath();g.roundRect(px-14,cy-14,28,28,8);g.fill();g.shadowBlur=0;dot(g,px,cy,'#38472c',3);
   arrow(g,px,cy-25,Math.max(-55,Math.min(55,sim.v/extent*55)),color);text(g,'v',px,cy-38,color,'center');
-  if(flash>.15){g.globalAlpha=flash;g.strokeStyle=C.orange;g.beginPath();g.arc(cx,cy,22+(1-flash)*28,0,Math.PI*2);g.stroke();g.globalAlpha=1;text(g,'УДАР · −h',cx+38,24,C.orange);}
+  if(flash>.15){g.globalAlpha=flash;g.strokeStyle=C.orange;g.beginPath();g.arc(cx,cy,22+(1-flash)*28,0,Math.PI*2);g.stroke();g.globalAlpha=1;text(g,t('УДАР · −h'),cx+38,24,C.orange);}
 }
 function drawPhase(){
   const p=axes(canvas('phase'),-extent,extent,-extent,extent,'x','v');
@@ -75,9 +77,10 @@ function drawMap(){
     const e=sim.events.at(-1);if(e){dot(p.g,p.X(e.prev),p.Y(e.after),C.purple,5,true);p.g.strokeStyle='#ece2ff';p.g.beginPath();p.g.arc(p.X(e.prev),p.Y(e.after),8,0,Math.PI*2);p.g.stroke();}
   });
   text(p.g,'−a/q',p.X(threshold),p.T-9,C.orange,'center');
-  if(!sim.events.length)text(p.g,'Точки появятся при пересечении x = 0',(p.L+p.R)/2,(p.T+p.B)/2+30,C.muted,'center');
+  if(!sim.events.length)text(p.g,t('Точки появятся при пересечении x = 0'),(p.L+p.R)/2,(p.T+p.B)/2+30,C.muted,'center');
 }
-function draw(){if(!sim)return;let peak=Math.max(1,sim.a,Math.abs(sim.v),Math.abs(sim.x));for(const p of sim.points)peak=Math.max(peak,Math.abs(p.x),Math.abs(p.v));for(const e of sim.events)peak=Math.max(peak,Math.abs(e.prev),Math.abs(e.after));extent=Math.max(extent,Math.ceil(peak*1.15*4)/4);drawOscillator();drawPhase();drawTimeline();drawMap();$('time').textContent=sim.t.toFixed(2);$('position').textContent=sim.x.toFixed(3);$('velocity').textContent=sim.v.toFixed(3);$('impacts').textContent=sim.hits;$('samples').textContent=`${sim.n} пересечений · ${sim.events.length} пар`;$('status').textContent=flash>.15?'● УДАР':playing?'● ДВИЖЕНИЕ':'● ПАУЗА';$('status').className='live'+(flash>.15?' impact':'');}
+function draw(){if(!sim)return;let peak=Math.max(1,sim.a,Math.abs(sim.v),Math.abs(sim.x));for(const p of sim.points)peak=Math.max(peak,Math.abs(p.x),Math.abs(p.v));for(const e of sim.events)peak=Math.max(peak,Math.abs(e.prev),Math.abs(e.after));extent=Math.max(extent,Math.ceil(peak*1.15*4)/4);drawOscillator();drawPhase();drawTimeline();drawMap();$('time').textContent=sim.t.toFixed(2);$('position').textContent=sim.x.toFixed(3);$('velocity').textContent=sim.v.toFixed(3);$('impacts').textContent=sim.hits;$('samples').textContent=I18n.language==='en'?`Crossings: ${sim.n} · pairs: ${sim.events.length}`:`Пересечения: ${sim.n} · пары: ${sim.events.length}`;$('status').textContent=t(flash>.15?'● УДАР':playing?'● ДВИЖЕНИЕ':'● ПАУЗА');$('play').textContent=t(playing?'Ⅱ Пауза':'▶ Продолжить');if(!$('notice').hidden)$('notice').textContent=t(noticeMessage);$('status').className='live'+(flash>.15?' impact':'');}
 function frame(now){const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(playing&&!document.hidden&&!$('guide').open)advance(dt*Number($('speed').value));flash=Math.max(0,flash-dt*1.8);draw();requestAnimationFrame(frame);}
 window.addEventListener('resize',draw);
+document.addEventListener('languagechange',draw);
 reset();requestAnimationFrame(frame);
