@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101312">
+  <meta name="description" content="Интерактивная лаборатория осциллятора Неймарка: движение, фазовая траектория и отображение Пуанкаре.">
+  <title>Осциллятор Неймарка · Динамическая лаборатория</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><a class="brand" href="./index.html"><span class="brand-icon">∿</span> ДИНАМИКА<span class="brand-divider">/</span><span class="muted">ВИРТУАЛЬНАЯ ЛАБОРАТОРИЯ</span></a><span class="edition">ЭКСПЕРИМЕНТ 08.3 <span class="dot"></span> ЛОКАЛЬНО · БЕЗ СЕТИ</span></header>
+<main>
+  <section class="intro"><div><div class="eyebrow">ОТРИЦАТЕЛЬНОЕ ТРЕНИЕ / ИМПУЛЬСНОЕ ДВИЖЕНИЕ</div><h1>Осциллятор Неймарка<span>.</span></h1><p>Одно движение. Три представления. Наблюдайте, как растущая спираль меняется при ударе.</p></div><button id="help" class="quiet">Как читать эксперимент <span>↗</span></button></section>
+  <div class="workspace">
+    <aside class="panel controls">
+      <div class="panel-heading"><h2>Параметры</h2><span class="small muted">01 — УПРАВЛЕНИЕ</span></div>
+      <label class="select-label" for="preset">Сценарий</label><select id="preset"><option value="base">Рост и удары</option><option value="slow">Медленное нарастание</option><option value="spiral">Свободная спираль · h = 0</option><option value="custom" disabled>Свои параметры</option></select>
+      <div class="parameter"><label for="delta">Отрицательное трение <span>δ</span></label><output for="delta" id="deltaValue">0.055</output><input id="delta" type="range" min="0" max="0.15" step="0.001" value="0.055"><div class="range-ends"><span>0</span><span>0.15</span></div></div>
+      <div class="parameter"><label for="a">Порог удара <span>a</span></label><output for="a" id="aValue">1.00</output><input id="a" type="range" min="0.3" max="2" step="0.01" value="1"><div class="range-ends"><span>0.30</span><span>2.00</span></div></div>
+      <div class="parameter"><label for="h">Скачок скорости <span>h</span></label><output for="h" id="hValue">1.00</output><input id="h" type="range" min="0" max="2" step="0.01" value="1"><div class="range-ends"><span>0</span><span>2.00</span></div></div>
+      <div class="parameter"><label for="v0">Начальная скорость <span>v₀</span></label><output for="v0" id="v0Value">0.42</output><input id="v0" type="range" min="-1.5" max="1.5" step="0.01" value="0.42"><div class="range-ends"><span>−1.50</span><span>1.50</span></div></div>
+      <p class="control-note">Изменение параметров начинает новый опыт. Начальная координата x₀ = 0.</p>
+      <div class="transport"><button id="play" class="primary">Ⅱ Пауза</button><button id="reset" title="Начать заново" aria-label="Начать заново">↺</button></div>
+      <button id="step" class="step">Шаг на полпериода <span>+ π →</span></button>
+      <div class="speed"><label for="speed">Темп анимации</label><select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></div>
+      <div class="toggles"><label><input id="projection" type="checkbox" checked> Проекция скорости</label><label><input id="section" type="checkbox" checked> Точки сечения x = 0</label></div>
+      <div class="formula"><span>МЕЖДУ УДАРАМИ</span><div>ẍ − 2δẋ + (1 + δ²)x = 0</div><small>При x = 0 и v⁻ &gt; a: v⁺ = v⁻ − h</small></div>
+    </aside>
+    <section class="visuals">
+      <article class="panel oscillator-panel"><div class="panel-heading"><h2>Движение осциллятора</h2><span id="status" class="live">● ДВИЖЕНИЕ</span></div><canvas id="oscillator" aria-label="Анимация одномерного осциллятора с пружиной"></canvas><div class="readouts"><div><span>ВРЕМЯ t</span><strong id="time">0.00</strong></div><div><span>КООРДИНАТА x</span><strong id="position">0.000</strong></div><div><span>СКОРОСТЬ v</span><strong id="velocity">0.420</strong></div><div><span>УДАРЫ</span><strong id="impacts">0</strong></div><div class="readout-note">Безразмерные величины<br>Полпериода Δt = π</div></div></article>
+      <div class="plots"><article class="panel phase-panel"><div class="panel-heading"><h2><i class="key green"></i>Фазовая траектория</h2><span class="small muted">02 — (x, v)</span></div><div class="plot-subtitle">Текущее состояние и след движения</div><canvas id="phase" aria-label="Фазовый портрет: координата x и скорость v"></canvas><div class="plot-footer"><span><i class="key green"></i>Движение</span><span><i class="key orange"></i>Скачок при ударе</span><span>Автомасштаб</span></div></article>
+      <article class="panel velocity-panel"><div class="panel-heading"><h2><i class="key green"></i>Скорость во времени</h2><span class="small muted">03 — v(t)</span></div><div class="plot-subtitle">Та же скорость — на временной оси</div><canvas id="timeline" aria-label="График скорости от времени"></canvas><div class="plot-footer"><span id="windowLabel">Окно: 8 полупериодов</span><span><i class="key orange"></i>Порог a</span></div></article></div>
+      <article class="panel map-panel"><div class="map-description"><div class="eyebrow">04 — СЕЧЕНИЕ ПУАНКАРЕ</div><h2>От полупериода<br>к полупериоду</h2><p>Каждая точка связывает две последовательные скорости при x = 0, сразу после возможного удара.</p><div class="map-formula">vₙ₊₁ = −qvₙ − h Θ(−qvₙ − a)<small>q = e<sup>πδ</sup> = <b id="q">1.189</b></small></div><div class="map-count"><i class="key purple"></i><span id="samples">0 пересечений</span></div><button id="export" class="quiet">Скачать точки · CSV ↗</button></div><div class="map-chart"><canvas id="map" aria-label="Отображение за полпериода: v n плюс 1 от v n"></canvas><div class="plot-footer"><span><i class="key purple"></i>Наблюдаемые пары</span><span>Пунктир: vₙ₊₁ = vₙ</span></div></div></article>
+      <p id="notice" class="notice" role="status" hidden></p>
+    </section>
+  </div>
+  <footer><span>ПО МОДЕЛИ ИЗ FPAllbook · § 8.3 · СТР. 75–76</span><span>Точное решение между ударами <span class="dot"></span> HTML / CSS / JS</span></footer>
+</main>
+<dialog id="guide"><button id="closeHelp" class="close" aria-label="Закрыть">×</button><div class="eyebrow">КАК ЧИТАТЬ ЭКСПЕРИМЕНТ</div><h2>Следуйте за светящейся точкой</h2><p>Пружина показывает координату частицы. Стрелка рядом с частицей показывает направление и величину скорости. Длина пружины условная; координата подписана на оси.</p><p><b>Фазовый портрет:</b> по горизонтали — координата x, по вертикали — скорость v. Зелёный след — движение между ударами. Оранжевый отрезок на x = 0 — мгновенный скачок скорости.</p><p><b>График v(t):</b> зелёная точка имеет ту же высоту, что и точка фазовой траектории. Пунктирная проекция связывает два графика. Шкала скорости у них общая.</p><p><b>Отображение:</b> фиолетовые точки — пары (vₙ, vₙ₊₁). Линия показывает точное правило перехода за π единиц времени. Разрыв линии соответствует порогу удара.</p><p>Нажмите «Шаг на полпериода», чтобы остановить анимацию и продвинуть время на π. В сечении учитывается скорость после скачка. Удар происходит только при положительной скорости v &gt; a; при v = a удара нет.</p><p>След хранит последние 24 полупериода, график скорости — 8, отображение и экспорт — до 2000 последних переходов. При слишком большом размахе опыт автоматически останавливается.</p><button id="understood" class="primary">К эксперименту →</button></dialog>
+<script src="physics.js"></script><script src="app.js"></script>
+</body></html>
