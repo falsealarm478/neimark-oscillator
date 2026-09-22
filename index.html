@@ -5,7 +5,7 @@
   <meta name="theme-color" content="#101312">
   <meta name="description" content="Интерактивная лаборатория осциллятора Неймарка: движение, фазовая траектория и отображение Пуанкаре.">
   <title>Осциллятор Неймарка · Динамическая лаборатория</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="lecture.css">
 </head>
 <body>
 <header><a class="brand" href="./index.html"><span class="brand-icon">∿</span> ДИНАМИКА<span class="brand-divider">/</span><span class="muted">ВИРТУАЛЬНАЯ ЛАБОРАТОРИЯ</span></a><span class="edition">ЭКСПЕРИМЕНТ 08.3 <span class="dot"></span> ЛОКАЛЬНО · БЕЗ СЕТИ</span></header>
@@ -37,5 +37,5 @@
   <footer><span>ПО МОДЕЛИ ИЗ FPAllbook · § 8.3 · СТР. 75–76</span><span>Точное решение между ударами <span class="dot"></span> HTML / CSS / JS</span></footer>
 </main>
 <dialog id="guide"><button id="closeHelp" class="close" aria-label="Закрыть">×</button><div class="eyebrow">КАК ЧИТАТЬ ЭКСПЕРИМЕНТ</div><h2>Следуйте за светящейся точкой</h2><p>Пружина показывает координату частицы. Стрелка рядом с частицей показывает направление и величину скорости. Длина пружины условная; координата подписана на оси.</p><p><b>Фазовый портрет:</b> по горизонтали — координата x, по вертикали — скорость v. Зелёный след — движение между ударами. Оранжевый отрезок на x = 0 — мгновенный скачок скорости.</p><p><b>График v(t):</b> зелёная точка имеет ту же высоту, что и точка фазовой траектории. Пунктирная проекция связывает два графика. Шкала скорости у них общая.</p><p><b>Отображение:</b> фиолетовые точки — пары (vₙ, vₙ₊₁). Линия показывает точное правило перехода за π единиц времени. Разрыв линии соответствует порогу удара.</p><p>Нажмите «Шаг на полпериода», чтобы остановить анимацию и продвинуть время на π. В сечении учитывается скорость после скачка. Удар происходит только при положительной скорости v &gt; a; при v = a удара нет.</p><p>След хранит последние 24 полупериода, график скорости — 8, отображение и экспорт — до 2000 последних переходов. При слишком большом размахе опыт автоматически останавливается.</p><button id="understood" class="primary">К эксперименту →</button></dialog>
-<script src="i18n.js"></script><script src="physics.js"></script><script src="app.js"></script>
+<script src="presentation.js"></script><script src="i18n.js"></script><script src="physics.js"></script><script src="app.js"></script><script src="navigation.js"></script>
 </body></html>

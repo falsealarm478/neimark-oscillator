@@ -55,6 +55,7 @@ const I18n=(()=>{
     'Точки появятся при пересечении x = 0':'Points appear when crossing x = 0',
     'Движение вышло за диапазон |x|, |v| ≤ 10 000. Увеличьте h, уменьшите δ или начните заново.':'Motion exceeded the range |x|, |v| ≤ 10,000. Increase h, decrease δ or restart.'
   };
+  Object.assign(en,window.PresentationTranslations||{});
   let language='ru';
   try{if(localStorage.getItem('neimark-language')==='en')language='en';}catch{/* Storage can be disabled, including for local files. */}
   const textNodes=[];
