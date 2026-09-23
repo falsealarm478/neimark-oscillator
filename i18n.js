@@ -65,8 +65,8 @@ const I18n=(()=>{
     if(en[node.textContent.trim()])textNodes.push({node,original:node.textContent});
   }
   const attributes=[];
-  document.querySelectorAll('[aria-label],[title],meta[name="description"]').forEach(node=>{
-    for(const key of ['aria-label','title','content']){
+  document.querySelectorAll('[aria-label],[title],[alt],meta[name="description"]').forEach(node=>{
+    for(const key of ['aria-label','title','alt','content']){
       const original=node.getAttribute(key);
       if(original&&en[original])attributes.push({node,key,original});
     }
