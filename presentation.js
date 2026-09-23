@@ -10,7 +10,7 @@ window.PresentationTranslations={
   'Титульная страница':'Title page','На весь экран':'Full screen','Обычный экран':'Exit full screen',
   'Начните с движения — исследуйте его на графиках.':'Start with motion — explore it through graphs.',
   'Эмблема МГУ':'MSU emblem','Эмблема ВМК':'CMC emblem','Место для официальной эмблемы':'Official emblem to be supplied',
-  'Раздел 8.3 · Статистическая физика':'Section 8.3 · Statistical physics',
+  'Флуктуационные процессы':'Fluctuation Processes',
   'Физическая модель':'Physical model','Точное движение между ударами':'Exact motion between impacts',
   'Уравнение описывает одномерный осциллятор с отрицательным трением. Параметр δ ≥ 0 задаёт рост амплитуды.':'The equation describes a one-dimensional oscillator with negative friction. The parameter δ ≥ 0 controls amplitude growth.',
   'Здесь s — время от последнего пересечения x = 0, а vₙ — скорость после возможного удара.':'Here s is the time since the last crossing of x = 0, and vₙ is the velocity after any impact.',
@@ -44,7 +44,7 @@ document.body.insertAdjacentHTML('beforeend',`
   <div class="institution"><div class="faculty-emblem"><img src="msu-logo.png" alt="Эмблема МГУ" width="850" height="830"></div><div><p>МГУ имени М. В. Ломоносова</p><h2>Факультет вычислительной математики и кибернетики</h2></div><div class="faculty-emblem"><img src="vmk-logo.png" alt="Эмблема ВМК" width="3028" height="3196"></div></div>
   
   <section class="title-hero"><div class="title-copy"><div class="eyebrow">Учебная интерактивная презентация</div><h1>Осциллятор Неймарка<span>.</span></h1><div class="title-actions"><button class="primary" data-view="laboratory">Презентация</button><button data-view="theory">Теория по теме</button><button data-view="authors">Авторы</button><button data-view="exit">Выход</button></div></div><div class="hero-orbit" aria-hidden="true"><svg viewBox="0 0 400 400"><path class="orbit-grid" d="M20 200H380 M200 20V380"/><path class="orbit-line" d="M200 200 C200 180 230 180 235 202 C247 250 166 260 152 205 C130 120 258 110 279 197 C311 328 112 334 86 207 C47 17 334 28 348 191 C366 373 33 394 32 199"/><path class="orbit-jump" d="M200 44V218"/><circle cx="200" cy="218" r="9"/></svg><span>x · v</span></div></section>
-  <div class="title-bottom"><span>Раздел 8.3 · Статистическая физика</span><span>2026 · МГУ · ВМК</span></div>
+  <div class="title-bottom"><span>Флуктуационные процессы</span><span>2026 · МГУ · ВМК</span></div>
 </main>
 <main id="theory" class="view reading-view" hidden><div class="eyebrow">Теория по теме</div><h1>Физическая модель</h1><div class="theory-grid">
 <article class="panel"><h2>Точное движение между ударами</h2><p>Уравнение описывает одномерный осциллятор с отрицательным трением. Параметр δ ≥ 0 задаёт рост амплитуды.</p><div class="theory-equation">ẍ − 2δẋ + (1 + δ²)x = 0</div><div class="theory-equation">x(s) = vₙe<sup>δs</sup> sin s<br>v(s) = vₙe<sup>δs</sup>(cos s + δ sin s)</div><p>Здесь s — время от последнего пересечения x = 0, а vₙ — скорость после возможного удара.</p></article>
