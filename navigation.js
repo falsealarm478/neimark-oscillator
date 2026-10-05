@@ -23,3 +23,16 @@ projectorButton.onclick=()=>{document.body.classList.toggle('projector-mode');do
 document.getElementById('settingsPanel').onclick=()=>document.body.classList.toggle('settings-open');
 function projectorLabel(){projectorButton.textContent=t(document.body.classList.contains('projector-mode')?'Обычный вид':'Показ на проекторе');}
 document.addEventListener('languagechange',projectorLabel);
+
+// Theme changes only the presentation; simulation state remains intact.
+const themeButton=document.createElement('button');
+themeButton.id='themeToggle';themeButton.type='button';
+document.querySelector('header').insertBefore(themeButton,document.querySelector('.language-switch'));
+const darkPalette={...C};
+const lightPalette={green:'#3f700c',orange:'#a74708',purple:'#7040b0',grid:'#dce3ea',axis:'#65758a',muted:'#435267',bg:'#ffffff'};
+function themeLabel(){const light=document.documentElement.dataset.theme==='light';themeButton.textContent=I18n.language==='en'?(light?'Dark theme':'Light theme'):(light?'Тёмная тема':'Светлая тема');}
+function applyTheme(theme){document.documentElement.dataset.theme=theme;Object.assign(C,theme==='light'?lightPalette:darkPalette);themeLabel();draw();}
+let savedTheme='dark';try{savedTheme=localStorage.getItem('neimark-theme')==='light'?'light':'dark';}catch{}
+applyTheme(savedTheme);
+themeButton.onclick=()=>{const theme=document.documentElement.dataset.theme==='light'?'dark':'light';applyTheme(theme);try{localStorage.setItem('neimark-theme',theme);}catch{}};
+document.addEventListener('languagechange',themeLabel);

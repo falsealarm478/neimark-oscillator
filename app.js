@@ -55,28 +55,28 @@ function drawPhase(){
   const p=axes(canvas('phase'),-extent,extent,-extent,extent,'x [1]','v [1]');
   path(p,sim.points,e=>e.x,e=>e.v);
   clip(p,()=>{for(const e of sim.events.filter(e=>e.t>=sim.t-24*Math.PI)){if(e.hit)line(p.g,p.X(0),p.Y(e.before),p.X(0),p.Y(e.after),C.orange,2);if($('section').checked)dot(p.g,p.X(0),p.Y(e.after),C.purple,2.5);}
-    line(p.g,p.L,p.Y(sim.a),p.R,p.Y(sim.a),'#a27a5355',1,[4,5]);
-    if($('projection').checked)line(p.g,p.X(sim.x),p.Y(sim.v),p.R,p.Y(sim.v),'#c1ed8380',1,[4,4]);
+    line(p.g,p.L,p.Y(sim.a),p.R,p.Y(sim.a),C.orange+'80',1,[4,5]);
+    if($('projection').checked)line(p.g,p.X(sim.x),p.Y(sim.v),p.R,p.Y(sim.v),C.green+'80',1,[4,4]);
     dot(p.g,p.X(sim.x),p.Y(sim.v),C.green,4.5,true);
   });text(p.g,'a',p.R-3,p.Y(sim.a)-5,C.orange,'right');
 }
 function drawTimeline(){
   const span=8*Math.PI,min=Math.max(0,sim.t-span*.92),max=min+span;
   const p=axes(canvas('timeline'),min,max,-extent,extent,'t [1]','v [1]');
-  clip(p,()=>{line(p.g,p.L,p.Y(sim.a),p.R,p.Y(sim.a),'#a27a5377',1,[4,5]);for(const e of sim.events.filter(e=>e.t>=min)){if(e.hit){line(p.g,p.X(e.t),p.T,p.X(e.t),p.B,'#f3ab711c');line(p.g,p.X(e.t),p.Y(e.before),p.X(e.t),p.Y(e.after),C.orange,2);}}});
+  clip(p,()=>{line(p.g,p.L,p.Y(sim.a),p.R,p.Y(sim.a),C.orange+'80',1,[4,5]);for(const e of sim.events.filter(e=>e.t>=min)){if(e.hit){line(p.g,p.X(e.t),p.T,p.X(e.t),p.B,C.orange+'1c');line(p.g,p.X(e.t),p.Y(e.before),p.X(e.t),p.Y(e.after),C.orange,2);}}});
   path(p,sim.points.filter(e=>e.t>=min-.03),e=>e.t,e=>e.v);
-  clip(p,()=>{if($('projection').checked)line(p.g,p.L,p.Y(sim.v),p.X(sim.t),p.Y(sim.v),'#c1ed8380',1,[4,4]);dot(p.g,p.X(sim.t),p.Y(sim.v),C.green,4.5,true);});text(p.g,'a',p.R-3,p.Y(sim.a)-5,C.orange,'right');
+  clip(p,()=>{if($('projection').checked)line(p.g,p.L,p.Y(sim.v),p.X(sim.t),p.Y(sim.v),C.green+'80',1,[4,4]);dot(p.g,p.X(sim.t),p.Y(sim.v),C.green,4.5,true);});text(p.g,'a',p.R-3,p.Y(sim.a)-5,C.orange,'right');
 }
 function drawMap(){
   const q=Math.exp(Math.PI*sim.delta),r=extent,p=axes(canvas('map'),-r,r,-r,r,'vₙ [1]','vₙ₊₁ [1]'),threshold=-sim.a/q;
   clip(p,()=>{
     line(p.g,p.X(-r),p.Y(-r),p.X(r),p.Y(r),'#65705a',1,[4,5]);
     // Separate branches: never draw an artificial vertical connector at the discontinuity.
-    if(threshold>-r)line(p.g,p.X(-r),p.Y(q*r-sim.h),p.X(Math.min(threshold,r)),p.Y(-q*Math.min(threshold,r)-sim.h),'#9580c1',1.5);
-    if(threshold<r)line(p.g,p.X(Math.max(-r,threshold)),p.Y(-q*Math.max(-r,threshold)),p.X(r),p.Y(-q*r),'#9580c1',1.5);
-    if(threshold>=-r&&threshold<=r){line(p.g,p.X(threshold),p.T,p.X(threshold),p.B,'#f3ab7144',1,[3,5]);dot(p.g,p.X(threshold),p.Y(sim.a-sim.h),C.purple,4);dot(p.g,p.X(threshold),p.Y(sim.a-sim.h),C.bg,2.5);dot(p.g,p.X(threshold),p.Y(sim.a),C.purple,3);}
+    if(threshold>-r)line(p.g,p.X(-r),p.Y(q*r-sim.h),p.X(Math.min(threshold,r)),p.Y(-q*Math.min(threshold,r)-sim.h),C.purple,1.5);
+    if(threshold<r)line(p.g,p.X(Math.max(-r,threshold)),p.Y(-q*Math.max(-r,threshold)),p.X(r),p.Y(-q*r),C.purple,1.5);
+    if(threshold>=-r&&threshold<=r){line(p.g,p.X(threshold),p.T,p.X(threshold),p.B,C.orange+'66',1,[3,5]);dot(p.g,p.X(threshold),p.Y(sim.a-sim.h),C.purple,4);dot(p.g,p.X(threshold),p.Y(sim.a-sim.h),C.bg,2.5);dot(p.g,p.X(threshold),p.Y(sim.a),C.purple,3);}
     sim.events.forEach((e,i)=>{p.g.globalAlpha=.22+.68*(i+1)/sim.events.length;dot(p.g,p.X(e.prev),p.Y(e.after),C.purple,3);});p.g.globalAlpha=1;
-    const e=sim.events.at(-1);if(e){dot(p.g,p.X(e.prev),p.Y(e.after),C.purple,5,true);p.g.strokeStyle='#ece2ff';p.g.beginPath();p.g.arc(p.X(e.prev),p.Y(e.after),8,0,Math.PI*2);p.g.stroke();}
+    const e=sim.events.at(-1);if(e){dot(p.g,p.X(e.prev),p.Y(e.after),C.purple,5,true);p.g.strokeStyle=C.purple;p.g.beginPath();p.g.arc(p.X(e.prev),p.Y(e.after),8,0,Math.PI*2);p.g.stroke();}
   });
   text(p.g,'−a/q',p.X(threshold),p.T-9,C.orange,'center');
   if(!sim.events.length)text(p.g,t('Точки появятся при пересечении x = 0'),(p.L+p.R)/2,(p.T+p.B)/2+30,C.muted,'center');
